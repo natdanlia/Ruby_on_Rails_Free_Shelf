@@ -1,9 +1,18 @@
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
 
+  before_action :authenticate
+
+
+
+  end
+
   # GET /books
   # GET /books.json
   def index
+    if !current_user
+      redirect_to new_session_path
+    end
     @books = Book.all
   end
 
@@ -71,4 +80,9 @@ class BooksController < ApplicationController
     def book_params
       params.require(:book).permit(:title, :author, :description, :url)
     end
+    
+    def authenticate
+      if !current_user
+        redirect_to new_session_path
+      end
 end
